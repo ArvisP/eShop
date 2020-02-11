@@ -1,16 +1,13 @@
-# eshop
+# eShop
 
-A new Flutter project.
+A virtual supermarket template created using Google's Flutter. Users are able to do all their grocery shopping from their mobile device. Once done, they're given an estimate for how long until their items can be picked up.
 
-## Getting Started
+Supports dark mode!
 
-This project is a starting point for a Flutter application.
+<img src="https://github.com/ArvisP/eShop/blob/master/main_menu.png" height="30%" width="30%"><img src="https://github.com/ArvisP/eShop/blob/master/dark_mode.png" height="30%" width="30%"><img src="https://github.com/ArvisP/eShop/blob/master/suggestion_screen.png" height="30%" width="30%">
 
-A few resources to get you started if this is your first Flutter project:
+Items can also be removed or edited once added to the cart.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+<img src="https://github.com/ArvisP/eShop/blob/master/add_to_cart.png" height="30%" width="30%"><img src="https://github.com/ArvisP/eShop/blob/master/shopping_cart.png" height="30%" width="30%"><img src="https://github.com/ArvisP/eShop/blob/master/dark_cart.png" height="30%" width="30%">
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="https://github.com/ArvisP/eShop/blob/master/order_processed.png" height="30%" width="30%">
