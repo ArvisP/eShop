@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 class CheckOutScreen extends StatefulWidget {
   List<CartItem> cart;
   Function removeItem;
+  bool editMode = false;
+
   CheckOutScreen(this.cart, this.removeItem);
 
   @override
@@ -32,7 +34,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   _edit(BuildContext context, Item item) {
     setState(() {
-      null;
+      widget.editMode = !widget.editMode;
     });
   }
 
@@ -87,14 +89,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         barrierDismissible: true,
         barrierLabel: '',
         context: context,
-        pageBuilder: (context, animation1, animation2) {});
-/*
-     showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return Container();
-      });*/
+        pageBuilder: (context, animation1, animation2) {return;});
   }
 
   @override
@@ -116,7 +111,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             ? MainAxisAlignment.center
             : MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          widget.cart.length == 0
+          (widget.cart.length == 0)
               ? Text(
                   "No items in your cart",
                   style: TextStyle(color: Colors.grey, fontSize: 20.0),
@@ -135,7 +130,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     },
                   ),
                 ),
-          widget.cart.length == 0
+          (widget.cart.length == 0)
               ? Container()
               : Container(
                   height: 80.0,

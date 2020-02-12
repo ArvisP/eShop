@@ -1,13 +1,15 @@
+import 'dart:collection';
+
 import 'package:eshop/models/sale.dart';
-import 'package:eshop/screens/see_all_screen.dart';
 import 'package:eshop/widgets/sale_item.dart';
 import 'package:flutter/material.dart';
 
 class Sales extends StatelessWidget {
   List<Sale> list;
   Function _addToCart;
+  HashMap<Sale, bool> saleMap;
 
-  Sales(this.list);
+  Sales(this.list, this._addToCart, this.saleMap);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class Sales extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1.0),
               ),
-           /*   GestureDetector(
+              /*   GestureDetector(
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -47,7 +49,11 @@ class Sales extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemCount: list.length,
               itemBuilder: (BuildContext context, int index) {
-                return SaleItem(list[index]);
+                Sale item = list[index];
+                print(saleMap[item]);
+                return GestureDetector(
+                    onTap: () => saleMap[item] ? null : _addToCart(item: item.item, quantity: item.quantity, sale: item),
+                    child: SaleItem(item));
               }),
         ),
       ],

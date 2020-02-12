@@ -50,12 +50,18 @@ class CartItemWidget extends StatelessWidget {
                     Text("Size: ${size}",
                         style: TextStyle(
                             color: Colors.grey, fontWeight: FontWeight.w600)),
+                    item.isSale
+                        ? Text(
+                            "ON SALE",
+                            style: TextStyle(color: Colors.red, fontSize: 12.0),
+                          )
+                        : Container()
                   ],
                 ),
               ),
-              editMode ? Icon(Icons.remove_circle) : Container(),
+              Visibility(visible: editMode, child: Icon(Icons.remove_circle)),
               Text("Qty: ${quantity} "),
-              editMode ? Icon(Icons.add_circle) : Container(),
+              Visibility(visible: editMode, child: Icon(Icons.add_circle)),
               Text(" ${formatCurrency.format(price)}  "),
             ],
           ),
@@ -75,11 +81,14 @@ class CartItemWidget extends StatelessWidget {
                   ),
                 ]
               : <Widget>[
-                  IconSlideAction(
-                    caption: 'Edit',
-                    color: Colors.yellow[600],
-                    icon: Icons.edit,
-                    onTap: this._editModeEnabled,
+                  Visibility(
+                    visible: !item.isSale,
+                    child: IconSlideAction(
+                      caption: 'Edit',
+                      color: Colors.yellow[600],
+                      icon: Icons.edit,
+                      onTap: this._editModeEnabled,
+                    ),
                   ),
                   IconSlideAction(
                     caption: 'Remove',

@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoggedIn;
   String appTitle;
   HashMap<String, int> cartMap;
+  HashMap<Sale, bool> saleMap;
   List<CartItem> cartList;
   List<Item> buyAgain;
   List<Item> suggestions;
@@ -40,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     buyAgain = new List<Item>();
     suggestions = new List<Item>();
     sales = new List<Sale>();
+    saleMap = new HashMap<Sale, bool>();
     _getBuyAgainList();
     _getSuggestions();
     _getSaleList();
@@ -58,7 +60,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return (item1.name == item2.name && item1.index == item2.index);
   }
 
-  void _addItemToCart(Item item, int quantity) {
+  void _addItemToCart({Item item, int quantity, Sale sale}) {
+    print("SALE REGISTERED");
+    if (sale != null) {
+      setState(() {
+        cartList.add(new CartItem(sale.item, quantity, true));
+      });
+      return;
+    }
+
     String name = item.name + " " + item.sizes[item.index].toString();
     if (!cartMap.containsKey(name)) {
       cartMap[name] = quantity;
@@ -75,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (quantity > 0) {
       setState(() {
-        cartList.add(new CartItem(item, quantity));
+        cartList.add(new CartItem(item, quantity, false));
       });
     }
   }
@@ -101,6 +111,12 @@ class _HomeScreenState extends State<HomeScreen> {
     sales.add(new Sale(z, 2, x.prices[z.index], "BUY ONE, GET ONE FREE"));
     sales.add(
         new Sale(x, 2, x.prices[x.index] * 1.5, "BUY ONE, GET ONE 50% OFF"));
+    for (Sale sale in sales) {
+      print(sale.item.prices[sale.item.index]);
+      sale.item.prices[sale.item.index] = sale.price;
+      print(sale.item.prices[sale.item.index]);
+      saleMap[sale] = false;
+    }
   }
 
   void _getBuyAgainList() {
@@ -270,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: ListView(
               shrinkWrap: false,
               children: <Widget>[
-                Sales(this.sales),
+                Sales(this.sales, this._addItemToCart, this.saleMap),
                 BuyAgain(this.buyAgain, _addToCartDialog),
                 SuggestionList(this.suggestions, _addToCartDialog),
               ],
