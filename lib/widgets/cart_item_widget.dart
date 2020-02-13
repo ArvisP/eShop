@@ -3,25 +3,62 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class CartItemWidget extends StatelessWidget {
+class CartItemWidget extends StatefulWidget {
   CartItem item;
   bool editMode = false;
   Function edit;
   Function remove;
+
+  CartItemWidget(this.item, this.remove);
+
+  @override
+  _CartItemWidgetState createState() => _CartItemWidgetState();
+}
+
+class _CartItemWidgetState extends State<CartItemWidget> {
   final formatCurrency = new NumberFormat.simpleCurrency();
+  bool _loopActive = false;
+  int tempQuantity;
+  double tempPrice;
 
-  CartItemWidget(this.item, this.edit, this.remove);
+  _switchEditMode() {
+    if (!widget.editMode) {
+      tempQuantity = widget.item.quantity;
+      tempPrice = widget.item.price;
+    }
+    setState(() {
+      widget.editMode = !widget.editMode;
+    });
+  }
 
-  _editModeEnabled() {
-    editMode = true;
+  _okEdit() {
+    widget.item.setQuantity(tempQuantity);
+    _switchEditMode();
+  }
+
+  _cancelEdit() {
+    _switchEditMode();
+  }
+
+  void _pressedAdd(){
+    setState(() {
+      tempQuantity++;
+      tempPrice += widget.item.item.prices[widget.item.item.index];
+    });
+  }
+
+  void _pressedDeduct(){
+    setState(() {
+      tempQuantity--;
+      tempPrice -= widget.item.item.prices[widget.item.item.index];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    String name = item.item.name;
-    var size = item.item.sizes[item.item.selectedIndex];
-    int quantity = item.quantity;
-    double price = item.item.prices[item.item.selectedIndex] * item.quantity;
+    String name = widget.item.item.name;
+    var size = widget.item.item.sizes[widget.item.item.selectedIndex];
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -32,9 +69,9 @@ class CartItemWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               SizedBox(width: 5.0),
-              Image.asset(item.item.imageURL, width: 90.0, height: 90.0),
+              Image.asset(widget.item.item.imageURL, width: 90.0, height: 90.0),
               Container(
-                width: editMode
+                width: widget.editMode
                     ? MediaQuery.of(context).size.width * 0.2
                     : MediaQuery.of(context).size.width * 0.4,
                 margin: EdgeInsets.only(left: 10.0),
@@ -42,15 +79,15 @@ class CartItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "${name}",
+                      "$name",
                       style: TextStyle(fontWeight: FontWeight.w600),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text("Size: ${size}",
+                    Text("Size: $size",
                         style: TextStyle(
                             color: Colors.grey, fontWeight: FontWeight.w600)),
-                    item.isSale
+                    widget.item.isSale
                         ? Text(
                             "ON SALE",
                             style: TextStyle(color: Colors.red, fontSize: 12.0),
@@ -59,42 +96,58 @@ class CartItemWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              Visibility(visible: editMode, child: Icon(Icons.remove_circle)),
-              Text("Qty: ${quantity} "),
-              Visibility(visible: editMode, child: Icon(Icons.add_circle)),
-              Text(" ${formatCurrency.format(price)}  "),
+              Visibility(
+                visible: (widget.editMode && tempQuantity > 1),
+                child: GestureDetector(
+                  onTap: _pressedDeduct,
+                  child: Icon(Icons.remove_circle),
+                ),
+              ),
+              widget.editMode
+                  ? Text("Qty: $tempQuantity")
+                  : Text("Qty: ${widget.item.quantity} "),
+              Visibility(
+                visible: widget.editMode,
+                child: GestureDetector(
+                  onTap: _pressedAdd,
+                  child: Icon(Icons.add_circle),
+                ),
+              ),
+              widget.editMode
+                  ? Text(" ${formatCurrency.format(tempPrice)}  ")
+                  : Text(" ${formatCurrency.format(widget.item.price)}  "),
             ],
           ),
-          secondaryActions: editMode
+          secondaryActions: widget.editMode
               ? <Widget>[
                   IconSlideAction(
                     caption: 'Cancel',
                     color: Colors.red,
                     icon: Icons.cancel,
-                    onTap: null,
+                    onTap: _cancelEdit,
                   ),
                   IconSlideAction(
                     caption: 'Confirm',
                     color: Colors.green,
                     icon: Icons.check_circle,
-                    onTap: this.remove,
+                    onTap: _okEdit,
                   ),
                 ]
               : <Widget>[
                   Visibility(
-                    visible: !item.isSale,
+                    visible: !widget.item.isSale,
                     child: IconSlideAction(
                       caption: 'Edit',
                       color: Colors.yellow[600],
                       icon: Icons.edit,
-                      onTap: this._editModeEnabled,
+                      onTap: this._switchEditMode,
                     ),
                   ),
                   IconSlideAction(
                     caption: 'Remove',
                     color: Colors.red,
                     icon: Icons.delete,
-                    onTap: this.remove,
+                    onTap: this.widget.remove,
                   ),
                 ],
         ),

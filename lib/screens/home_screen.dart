@@ -61,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _addItemToCart({Item item, int quantity, Sale sale}) {
-    print("SALE REGISTERED");
     if (sale != null) {
       setState(() {
         cartList.add(new CartItem(sale.item, quantity, true));
@@ -111,10 +110,9 @@ class _HomeScreenState extends State<HomeScreen> {
     sales.add(new Sale(z, 2, x.prices[z.index], "BUY ONE, GET ONE FREE"));
     sales.add(
         new Sale(x, 2, x.prices[x.index] * 1.5, "BUY ONE, GET ONE 50% OFF"));
+    
     for (Sale sale in sales) {
-      print(sale.item.prices[sale.item.index]);
       sale.item.prices[sale.item.index] = sale.price;
-      print(sale.item.prices[sale.item.index]);
       saleMap[sale] = false;
     }
   }

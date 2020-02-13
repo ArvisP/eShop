@@ -10,7 +10,7 @@ class Sales extends StatelessWidget {
   HashMap<Sale, bool> saleMap;
 
   Sales(this.list, this._addToCart, this.saleMap);
-
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -50,7 +50,6 @@ class Sales extends StatelessWidget {
               itemCount: list.length,
               itemBuilder: (BuildContext context, int index) {
                 Sale item = list[index];
-                print(saleMap[item]);
                 return GestureDetector(
                     onTap: () => saleMap[item] ? null : _addToCart(item: item.item, quantity: item.quantity, sale: item),
                     child: SaleItem(item));

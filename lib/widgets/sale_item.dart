@@ -5,6 +5,7 @@ class SaleItem extends StatelessWidget {
   Sale sale;
   SaleItem(this.sale);
 
+  
   @override
   Widget build(BuildContext context) {
     return Container(

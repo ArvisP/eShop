@@ -96,7 +96,7 @@ class _AddToCartState extends State<AddToCart> with SingleTickerProviderStateMix
 
   void _dismissAnimation() {
     widget.addToCart(item: widget.item, quantity: widget.quantity);
-    _controller.forward();
+   // _controller.forward();
     Navigator.pop(context);
   }
 

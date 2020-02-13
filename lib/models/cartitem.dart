@@ -4,6 +4,14 @@ class CartItem {
   Item item;
   int quantity;
   bool isSale;
+  double price;
+  
+  CartItem(this.item, int q, this.isSale){
+    setQuantity(q);
+  }
 
-  CartItem(this.item, this.quantity, this.isSale);
+  setQuantity(int q){
+    this.quantity = q;
+    price = item.prices[item.index] * this.quantity;
+  }
 }

@@ -7,9 +7,11 @@ import 'package:intl/intl.dart';
 class CheckOutScreen extends StatefulWidget {
   List<CartItem> cart;
   Function removeItem;
-  bool editMode = false;
+  List<bool> editMode; 
 
-  CheckOutScreen(this.cart, this.removeItem);
+  CheckOutScreen(this.cart, this.removeItem){
+    editMode = List.filled(cart.length, false);
+  }
 
   @override
   _CheckOutScreenState createState() => _CheckOutScreenState();
@@ -22,20 +24,15 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   @override
   void _initState() {
     super.initState();
+  
     _getTotal();
   }
 
   _getTotal() {
     total = 0;
     for (CartItem item in this.widget.cart) {
-      total += item.item.prices[item.item.index] * item.quantity;
+      total += item.price;
     }
-  }
-
-  _edit(BuildContext context, Item item) {
-    setState(() {
-      widget.editMode = !widget.editMode;
-    });
   }
 
   _remove(BuildContext context, int index) {
@@ -70,7 +67,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     setState(() {
       widget.cart.clear();
     });
-    showGeneralDialog(barrierColor: Colors.black.withOpacity(0.5),
+    showGeneralDialog(
+        barrierColor: Colors.black.withOpacity(0.5),
         transitionBuilder: (context, a1, a2, widget) {
           return Transform.scale(
             scale: a1.value,
@@ -80,7 +78,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 shape: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16.0)),
                 title: Text("Thank you for your order!"),
-                content: Text('Give us 10 minutes to get your order ready for pick up :)'),
+                content: Text(
+                    'Give us 10 minutes to get your order ready for pick up :)'),
               ),
             ),
           );
@@ -89,7 +88,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         barrierDismissible: true,
         barrierLabel: '',
         context: context,
-        pageBuilder: (context, animation1, animation2) {return;});
+        pageBuilder: (context, animation1, animation2) {
+          return;
+        });
   }
 
   @override
@@ -124,7 +125,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       Item item = widget.cart[index].item;
                       return CartItemWidget(
                         widget.cart[index],
-                        () => _edit(context, item),
                         () => _remove(context, index),
                       );
                     },
