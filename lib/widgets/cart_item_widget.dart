@@ -17,9 +17,18 @@ class CartItemWidget extends StatefulWidget {
 
 class _CartItemWidgetState extends State<CartItemWidget> {
   final formatCurrency = new NumberFormat.simpleCurrency();
-  bool _loopActive = false;
+  String _name;
+  String _size;
   int tempQuantity;
   double tempPrice;
+  SlidableState state = new SlidableState();
+
+  @override
+  void initState(){
+    super.initState();
+    _name = widget.item.item.name;
+    _size = widget.item.item.sizes[widget.item.item.selectedIndex];
+  }
 
   _switchEditMode() {
     if (!widget.editMode) {
@@ -56,8 +65,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    String name = widget.item.item.name;
-    var size = widget.item.item.sizes[widget.item.item.selectedIndex];
+    
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -65,6 +73,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
         Slidable(
           actionPane: SlidableDrawerActionPane(),
           actionExtentRatio: 0.20,
+          
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -79,12 +88,12 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "$name",
+                      "$_name",
                       style: TextStyle(fontWeight: FontWeight.w600),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text("Size: $size",
+                    Text("Size: $_size",
                         style: TextStyle(
                             color: Colors.grey, fontWeight: FontWeight.w600)),
                     widget.item.isSale
