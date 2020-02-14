@@ -155,7 +155,7 @@ class _AddToCartState extends State<AddToCart> with SingleTickerProviderStateMix
                 children: <Widget>[
                   Text("${widget.item.name}",
                       style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 20.0,
                           fontWeight: FontWeight.w600)),
                   Container(
