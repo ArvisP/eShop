@@ -203,7 +203,7 @@ class _AddToCartState extends State<AddToCart> with SingleTickerProviderStateMix
                           style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor),
+                              color: Colors.black),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),

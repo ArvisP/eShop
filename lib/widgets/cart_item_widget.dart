@@ -24,7 +24,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
   SlidableState state = new SlidableState();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _name = widget.item.item.name;
     _size = widget.item.item.sizes[widget.item.item.selectedIndex];
@@ -49,14 +49,14 @@ class _CartItemWidgetState extends State<CartItemWidget> {
     _switchEditMode();
   }
 
-  void _pressedAdd(){
+  void _pressedAdd() {
     setState(() {
       tempQuantity++;
       tempPrice += widget.item.item.prices[widget.item.item.index];
     });
   }
 
-  void _pressedDeduct(){
+  void _pressedDeduct() {
     setState(() {
       tempQuantity--;
       tempPrice -= widget.item.item.prices[widget.item.item.index];
@@ -65,15 +65,13 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Slidable(
           actionPane: SlidableDrawerActionPane(),
           actionExtentRatio: 0.20,
-          
+          closeOnScroll: false,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
