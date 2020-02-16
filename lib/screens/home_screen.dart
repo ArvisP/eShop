@@ -14,8 +14,9 @@ import 'package:eshop/widgets/sale_carrousel.dart';
 import 'package:eshop/widgets/search_bar.dart';
 import 'package:eshop/widgets/suggestion_list.dart';
 import 'package:flutter/material.dart';
-import 'package:eshop/models/data/inventory.dart';
-import 'package:eshop/models/data/sales.dart';
+import 'package:eshop/models/data/inventory_data.dart';
+import 'package:eshop/models/data/sales_data.dart';
+import 'package:eshop/models/data/user_data.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -30,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CartItem> cartList;
   List<Item> buyAgain;
   List<Item> suggestions;
-  List<Sale> sales;
   final navigatorKey = GlobalKey<NavigatorState>();
   User user;
   bool searching;
@@ -45,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
     cartList = new List<CartItem>();
     buyAgain = new List<Item>();
     suggestions = new List<Item>();
-    sales = new List<Sale>();
     saleMap = new HashMap<Sale, bool>();
     searching = false;
     query = "What can we help you find today?";
@@ -56,8 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _login() {
     ///////  This method would handle user-login prior to setting the state //////
-    user = new User("assets/images/profile.jpg", "Jane", "Doe", "01/01/1900",
-        "New York", "NY");
     setState(() {
       isLoggedIn = true;
     });
@@ -108,13 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _getBuyAgainList() {
-   
-  }
+  void _getBuyAgainList() {}
 
-  void _getSuggestions() {
-  
-  }
+  void _getSuggestions() {}
 
   void _addToCartDialog(BuildContext context, Item item) {
     showDialog(
@@ -180,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProfileScreen(this.user),
+                        builder: (context) => ProfileScreen(user),
                       ),
                     ),
                     icon: Hero(
@@ -228,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ListView(
                     shrinkWrap: false,
                     children: <Widget>[
-                      Sales(this.sales, this._addItemToCart, this.saleMap),
+                      Sales(sales, this._addItemToCart, this.saleMap),
                       BuyAgain(this.buyAgain, _addToCartDialog),
                       SuggestionList(this.suggestions, _addToCartDialog),
                     ],
