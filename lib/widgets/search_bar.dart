@@ -2,6 +2,11 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {
+  String query;
+  Function search;
+
+  SearchBar(this.query, this.search);
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -27,7 +32,7 @@ class SearchBar extends StatelessWidget {
             color: Theme.of(context).primaryColor,
             child: AutoCompleteTextField<String>(
               key: key,
-              suggestions: null,
+              suggestions: ["Hello"],
               style: new TextStyle(
                 fontSize: 16.0,
                 color: Theme.of(context).focusColor,
@@ -35,7 +40,7 @@ class SearchBar extends StatelessWidget {
               ),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(left: 10.0, bottom: 13.0),
-                hintText: "What can we help you find today?",
+                hintText: this.query,
                 hintStyle: TextStyle(
                     color: Colors.grey[500],
                     fontSize: 16.0,
@@ -48,10 +53,10 @@ class SearchBar extends StatelessWidget {
                 return a.compareTo(b);
               },
               itemSubmitted: (item) {
-                
+                this.search(item);
               },
               itemBuilder: (context, item) {
-                return null;
+                return Text(item);
               },
             ),
           ),

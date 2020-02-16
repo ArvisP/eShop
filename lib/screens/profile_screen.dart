@@ -25,6 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
             height: MediaQuery.of(context).size.height * 0.3,
@@ -50,25 +51,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
+          Text("- WIP -"),
           Container(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 20.0),
-                    Text("Previous Orders: "),
-                    Text("Preferred Pick up location: "),
-                    Text("Saved Payment Methods: "),
-                  ],
-                ),
-              )),
-          SizedBox(height: 50.0),
-          RaisedButton(
-            onPressed: () => null,
-            color: Theme.of(context).accentColor,
-            child: Text("Edit"),
+            margin: EdgeInsets.only(bottom: 20.0),
+            child: RaisedButton(
+              onPressed: () => null,
+              color: Theme.of(context).accentColor,
+              child: Text("Edit"),
+            ),
           ),
         ],
       ),

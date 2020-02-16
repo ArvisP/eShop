@@ -14,9 +14,7 @@ class Item {
     this.selectedIndex = i;
   }
 
-  Item(this.name, this.imageURL, this.prices, this.sizes, this.categories){
-    this.selectedIndex = 0;
-  }
+  Item(this.name, this.imageURL, this.prices, this.sizes, this.categories, {this.selectedIndex = 0});
 
   Item clone(){
     Item copy = new Item(this.name, this.imageURL, this.prices, this.sizes, this.categories);

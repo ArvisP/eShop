@@ -7,11 +7,8 @@ import 'package:intl/intl.dart';
 class CheckOutScreen extends StatefulWidget {
   List<CartItem> cart;
   Function removeItem;
-  List<bool> editMode; 
-
-  CheckOutScreen(this.cart, this.removeItem){
-    editMode = List.filled(cart.length, false);
-  }
+  bool editing = false;
+  CheckOutScreen(this.cart, this.removeItem);
 
   @override
   _CheckOutScreenState createState() => _CheckOutScreenState();
@@ -24,7 +21,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   @override
   void _initState() {
     super.initState();
-  
+
     _getTotal();
   }
 
@@ -144,7 +141,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       ),
                     ],
                   ),
-                )
+                ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

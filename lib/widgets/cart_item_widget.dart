@@ -1,5 +1,6 @@
 import 'package:eshop/models/cartitem.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -21,7 +22,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
   String _size;
   int tempQuantity;
   double tempPrice;
-  SlidableState state = new SlidableState();
+  SlidableState state;
 
   @override
   void initState() {
@@ -64,7 +65,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -72,11 +73,12 @@ class _CartItemWidgetState extends State<CartItemWidget> {
           actionPane: SlidableDrawerActionPane(),
           actionExtentRatio: 0.20,
           closeOnScroll: false,
+           
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               SizedBox(width: 5.0),
-              Image.asset(widget.item.item.imageURL, width: 90.0, height: 90.0),
+              Image.asset(widget.item.item.imageURL, width: 80.0, height: 90.0),
               Container(
                 width: widget.editMode
                     ? MediaQuery.of(context).size.width * 0.2
@@ -159,6 +161,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 ],
         ),
         Divider(thickness: 2.0, height: 1.0),
+        
       ],
     );
   }
