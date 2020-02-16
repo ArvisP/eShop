@@ -57,7 +57,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: RaisedButton(
               onPressed: () => null,
               color: Theme.of(context).accentColor,
-              child: Text("Edit"),
+              child: Text(
+                "Edit",
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
             ),
           ),
         ],

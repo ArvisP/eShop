@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Item> buyAgain;
   List<Item> suggestions;
   final navigatorKey = GlobalKey<NavigatorState>();
-  User user;
   bool searching;
   String query;
 
@@ -41,11 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     appTitle = "eShop";
     isLoggedIn = false;
-    cartMap = new HashMap<String, int>();
+    cartMap = new HashMap<String, int>(); 
     cartList = new List<CartItem>();
     buyAgain = new List<Item>();
     suggestions = new List<Item>();
-    saleMap = new HashMap<Sale, bool>();
+    saleMap = new HashMap<Sale, bool>(); // Will ensure Sale prices can only be applied once per puchase.
     searching = false;
     query = "What can we help you find today?";
     _getBuyAgainList();
@@ -105,9 +104,23 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _getBuyAgainList() {}
+  void _getBuyAgainList() {
+    // Fetch previous items purchased
+    int startIndex = 0;
+    int endIndex = inventory.length - 5;
+     for (;startIndex < endIndex; startIndex++){
+      this.buyAgain.add(inventory[startIndex]);
+    }
+  }
 
-  void _getSuggestions() {}
+  void _getSuggestions() {
+    // Fetch suggestions based on previous searches or popular items
+    int startIndex = 4;
+    int endIndex = inventory.length;
+    for (;startIndex < endIndex; startIndex++){
+      this.suggestions.add(inventory[startIndex]);
+    }
+  }
 
   void _addToCartDialog(BuildContext context, Item item) {
     showDialog(

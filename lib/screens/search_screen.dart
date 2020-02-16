@@ -18,7 +18,6 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
-
     /// Process query to build result list ///
     result = new List<Item>();
     Item x = new Item("Sirloin Steak", "assets/images/sirloinsteak.png",
