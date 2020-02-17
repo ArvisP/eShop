@@ -11,7 +11,7 @@ import 'package:eshop/widgets/add_to_cart.dart';
 import 'package:eshop/widgets/cart_button.dart';
 import 'package:eshop/widgets/rebuy_carrousel.dart';
 import 'package:eshop/widgets/sale_carrousel.dart';
-import 'package:eshop/widgets/search_bar.dart';
+import 'package:eshop/widgets/search_widget.dart';
 import 'package:eshop/widgets/suggestion_list.dart';
 import 'package:flutter/material.dart';
 import 'package:eshop/models/data/inventory_data.dart';
@@ -40,11 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     appTitle = "eShop";
     isLoggedIn = false;
-    cartMap = new HashMap<String, int>(); 
+    cartMap = new HashMap<String, int>();
     cartList = new List<CartItem>();
     buyAgain = new List<Item>();
     suggestions = new List<Item>();
-    saleMap = new HashMap<Sale, bool>(); // Will ensure Sale prices can only be applied once per puchase.
+    saleMap = new HashMap<Sale,
+        bool>(); // Will ensure Sale prices can only be applied once per puchase.
     searching = false;
     query = "What can we help you find today?";
     _getBuyAgainList();
@@ -108,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Fetch previous items purchased
     int startIndex = 0;
     int endIndex = inventory.length - 5;
-     for (;startIndex < endIndex; startIndex++){
+    for (; startIndex < endIndex; startIndex++) {
       this.buyAgain.add(inventory[startIndex]);
     }
   }
@@ -117,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Fetch suggestions based on previous searches or popular items
     int startIndex = 4;
     int endIndex = inventory.length;
-    for (;startIndex < endIndex; startIndex++){
+    for (; startIndex < endIndex; startIndex++) {
       this.suggestions.add(inventory[startIndex]);
     }
   }
@@ -164,70 +165,68 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).accentColor,
-        title: Text(
-          appTitle,
-          style: TextStyle(color: Theme.of(context).primaryColor),
-        ),
-        elevation: 0.0,
-        leading: Visibility(
-          visible: this.searching,
-          child: GestureDetector(
-              onTap: doneSearching,
-              child: Icon(Icons.home,
-                  color: Theme.of(context).primaryColor, size: 30.0)),
-        ),
-        actions: <Widget>[
-          isLoggedIn
-              ? Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
-                  child: IconButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProfileScreen(user),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(45.0),
+        child: AppBar(
+          backgroundColor: Theme.of(context).accentColor,
+          title: Text(
+            appTitle,
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          elevation: 0.0,
+          leading: Visibility(
+            visible: this.searching,
+            child: GestureDetector(
+                onTap: doneSearching,
+                child: Icon(Icons.home,
+                    color: Theme.of(context).primaryColor, size: 30.0)),
+          ),
+          actions: <Widget>[
+            isLoggedIn
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: IconButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(user),
+                        ),
+                      ),
+                      icon: Hero(
+                        tag: user.userImageURL,
+                        child: CircleAvatar(
+                          radius: 15.0,
+                          backgroundImage: ExactAssetImage(user.userImageURL),
+                        ),
                       ),
                     ),
-                    icon: Hero(
-                      tag: user.userImageURL,
-                      child: CircleAvatar(
-                        radius: 15.0,
-                        backgroundImage: ExactAssetImage(user.userImageURL),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: OutlineButton(
+                      onPressed: _login,
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(5.0),
+                      ),
+                      borderSide: BorderSide(
+                        color: Theme.of(context)
+                            .primaryColor, //Color of the border
+                        style: BorderStyle.solid, //Style of the border
+                        width: 1.0,
+                      ),
+                      child: Text(
+                        "Sign in",
+                        style: TextStyle(color: Theme.of(context).primaryColor),
                       ),
                     ),
                   ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 20.0, 10.0, 15.0),
-                  child: OutlineButton(
-                    onPressed: _login,
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(5.0),
-                    ),
-                    borderSide: BorderSide(
-                      color:
-                          Theme.of(context).primaryColor, //Color of the border
-                      style: BorderStyle.solid, //Style of the border
-                      width: 1.0,
-                    ),
-                    child: Text(
-                      "Sign in",
-                      style: TextStyle(color: Theme.of(context).primaryColor),
-                    ),
-                  ),
-                ),
-        ],
+          ],
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SearchBar(this.query, this.search),
-            ],
-          ),
+          SearchWidget(this.query, this.search),
           searching
               ? SearchScreen(this.query, this._addToCartDialog)
               : Expanded(
