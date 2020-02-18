@@ -1,4 +1,3 @@
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:eshop/models/data/inventory_data.dart';
 import 'package:eshop/models/item.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
