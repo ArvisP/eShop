@@ -29,4 +29,6 @@ List<Item> inventory = [
       ["1lb", "2lb", "3lb"], ["Vegetable"]),
   new Item("Squash", "assets/images/squash.png", [2.50, 3.50, 4.00],
       ["8oz", "12oz", "16oz"], ["Vegetable"]),
+  new Item("Potatoes", "assets/images/potatoes.png", [2.50, 3.50, 4.00],
+      ["1lb", "1.5lb", "2lb"], ["Vegetable"]),
 ];

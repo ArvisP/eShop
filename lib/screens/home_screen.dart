@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:eshop/models/cartitem.dart';
 import 'package:eshop/models/item.dart';
 import 'package:eshop/models/sale.dart';
-import 'package:eshop/models/user.dart';
+
 import 'package:eshop/screens/checkout_screen.dart';
 import 'package:eshop/screens/profile_screen.dart';
 import 'package:eshop/screens/search_screen.dart';
@@ -31,9 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CartItem> cartList;
   List<Item> buyAgain;
   List<Item> suggestions;
+  HashMap<String, List<Item>> categorySearchMap;
   final navigatorKey = GlobalKey<NavigatorState>();
-  bool searching;
-  String query;
 
   @override
   void initState() {
@@ -46,11 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
     suggestions = new List<Item>();
     saleMap = new HashMap<Sale,
         bool>(); // Will ensure Sale prices can only be applied once per puchase.
-    searching = false;
-    query = "What can we help you find today?";
     _getBuyAgainList();
     _getSuggestions();
     _getSaleList();
+    _buildCategorySearchMap();
   }
 
   void _login() {
@@ -62,6 +60,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool compareItems(Item item1, Item item2) {
     return (item1.name == item2.name && item1.index == item2.index);
+  }
+
+  void _buildCategorySearchMap() {
+    this.categorySearchMap = new HashMap<String, List<Item>>();
+    for (Item item in inventory){
+      for (String category in item.categories){
+        category = category.toLowerCase();
+        print(category);
+        if (this.categorySearchMap.containsKey(category)){
+          this.categorySearchMap[category].add(item);
+        } else {
+          this.categorySearchMap[category] = [item];
+        }
+      }
+    }
   }
 
   void _addItemToCart({Item item, int quantity, Sale sale}) {
@@ -148,20 +161,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void search(String q) {
-    setState(() {
-      this.query = q;
-      searching = true;
-    });
-  }
-
-  void doneSearching() {
-    setState(() {
-      this.query = "What can we help you find today?";
-      searching = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,13 +173,6 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           elevation: 0.0,
-          leading: Visibility(
-            visible: this.searching,
-            child: GestureDetector(
-                onTap: doneSearching,
-                child: Icon(Icons.home,
-                    color: Theme.of(context).primaryColor, size: 30.0)),
-          ),
           actions: <Widget>[
             isLoggedIn
                 ? Padding(
@@ -223,22 +215,26 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
         children: <Widget>[
-          SearchWidget(this.query, this.search),
-          searching
-              ? SearchScreen(this.query, this._addToCartDialog)
-              : Expanded(
-                  child: ListView(
-                    shrinkWrap: false,
-                    children: <Widget>[
-                      Sales(sales, this._addItemToCart, this.saleMap),
-                      BuyAgain(this.buyAgain, _addToCartDialog),
-                      SuggestionList(this.suggestions, _addToCartDialog),
-                    ],
-                  ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(height: 75.0, color: Theme.of(context).accentColor),
+              Expanded(
+                child: ListView(
+                  shrinkWrap: false,
+                  children: <Widget>[
+
+                    Sales(sales, this._addItemToCart, this.saleMap),
+                    BuyAgain(this.buyAgain, _addToCartDialog),
+                    SuggestionList(this.suggestions, _addToCartDialog),
+                  ],
                 ),
+              ),
+            ],
+          ),
+          SearchWidget(this.categorySearchMap, this._addToCartDialog),
         ],
       ),
       floatingActionButton: CartButton(
