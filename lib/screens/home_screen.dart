@@ -56,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isLoggedIn = true;
     });
-  
   }
 
   bool compareItems(Item item1, Item item2) {
@@ -68,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
     for (Item item in inventory) {
       for (String category in item.categories) {
         category = category.toLowerCase();
-       
+
         if (this.categorySearchMap.containsKey(category)) {
           this.categorySearchMap[category].add(item);
         } else {
@@ -105,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
         cartList.add(new CartItem(item, quantity, false));
       });
     }
+    
   }
 
   _removeItem(Item item) {
