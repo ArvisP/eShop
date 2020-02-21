@@ -1,6 +1,5 @@
 import 'package:eshop/models/cartitem.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -47,8 +46,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 
   _okEdit() {
     widget.item.setQuantity(tempQuantity);
+    widget.updateTotal();
     _switchEditMode();
-    widget.updateTotal;
   }
 
   _cancelEdit() {
@@ -74,6 +73,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.20,
       closeOnScroll: false,
+      movementDuration: Duration(seconds: 1),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[

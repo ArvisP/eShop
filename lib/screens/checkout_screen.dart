@@ -124,7 +124,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       return CartItemWidget(
                         widget.cart[index],
                         () => _remove(context, index),
-                        _getTotal,
+                        this._getTotal,
                       );
                     },
                   ),
