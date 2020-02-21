@@ -19,17 +19,19 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   double total = 0;
 
   @override
-  void _initState() {
+  void initState() {
     super.initState();
-
     _getTotal();
   }
 
   _getTotal() {
-    total = 0;
+    double temp = 0;
     for (CartItem item in this.widget.cart) {
-      total += item.price;
+      temp += item.price;
     }
+    setState(() {
+      total = temp;
+    });
   }
 
   _remove(BuildContext context, int index) {
@@ -92,7 +94,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _getTotal();
+    
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -119,10 +121,10 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     shrinkWrap: true,
                     itemCount: widget.cart.length,
                     itemBuilder: (BuildContext context, int index) {
-                      Item item = widget.cart[index].item;
                       return CartItemWidget(
                         widget.cart[index],
                         () => _remove(context, index),
+                        _getTotal,
                       );
                     },
                   ),

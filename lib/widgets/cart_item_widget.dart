@@ -9,8 +9,9 @@ class CartItemWidget extends StatefulWidget {
   bool editMode = false;
   Function edit;
   Function remove;
+  Function updateTotal;
 
-  CartItemWidget(this.item, this.remove);
+  CartItemWidget(this.item, this.remove, this.updateTotal);
 
   @override
   _CartItemWidgetState createState() => _CartItemWidgetState();
@@ -22,7 +23,6 @@ class _CartItemWidgetState extends State<CartItemWidget> {
   String _size;
   int tempQuantity;
   double tempPrice;
-  SlidableState state;
 
   @override
   void initState() {
@@ -39,11 +39,16 @@ class _CartItemWidgetState extends State<CartItemWidget> {
     setState(() {
       widget.editMode = !widget.editMode;
     });
+
+    if (widget.editMode) {
+      Slidable.of(context).open();
+    }
   }
 
   _okEdit() {
     widget.item.setQuantity(tempQuantity);
     _switchEditMode();
+    widget.updateTotal;
   }
 
   _cancelEdit() {
@@ -64,104 +69,107 @@ class _CartItemWidgetState extends State<CartItemWidget> {
     });
   }
 
+  Widget _getSlidable() {
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      actionExtentRatio: 0.20,
+      closeOnScroll: false,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          SizedBox(width: 5.0),
+          Image.asset(widget.item.item.imageURL, width: 80.0, height: 90.0),
+          Container(
+            width: widget.editMode
+                ? MediaQuery.of(context).size.width * 0.2
+                : MediaQuery.of(context).size.width * 0.4,
+            margin: EdgeInsets.only(left: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "$_name",
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text("Size: $_size",
+                    style: TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.w600)),
+                widget.item.isSale
+                    ? Text(
+                        "ON SALE",
+                        style: TextStyle(color: Colors.red, fontSize: 12.0),
+                      )
+                    : Container()
+              ],
+            ),
+          ),
+          Visibility(
+            visible: (widget.editMode && tempQuantity > 1),
+            child: GestureDetector(
+              onTap: _pressedDeduct,
+              child: Icon(Icons.remove_circle),
+            ),
+          ),
+          widget.editMode
+              ? Text("Qty: $tempQuantity")
+              : Text("Qty: ${widget.item.quantity} "),
+          Visibility(
+            visible: widget.editMode,
+            child: GestureDetector(
+              onTap: _pressedAdd,
+              child: Icon(Icons.add_circle),
+            ),
+          ),
+          widget.editMode
+              ? Text(" ${formatCurrency.format(tempPrice)}  ")
+              : Text(" ${formatCurrency.format(widget.item.price)}  "),
+        ],
+      ),
+      secondaryActions: widget.editMode
+          ? <Widget>[
+              IconSlideAction(
+                caption: 'Cancel',
+                color: Colors.red,
+                icon: Icons.cancel,
+                onTap: _cancelEdit,
+              ),
+              IconSlideAction(
+                caption: 'Confirm',
+                color: Colors.green,
+                icon: Icons.check_circle,
+                onTap: _okEdit,
+              ),
+            ]
+          : <Widget>[
+              Visibility(
+                visible: !widget.item.isSale,
+                child: IconSlideAction(
+                  caption: 'Edit',
+                  color: Colors.yellow[600],
+                  icon: Icons.edit,
+                  onTap: this._switchEditMode,
+                ),
+              ),
+              IconSlideAction(
+                caption: 'Remove',
+                color: Colors.red,
+                icon: Icons.delete,
+                onTap: this.widget.remove,
+              ),
+            ],
+    );
+  }
+
   @override
-  Widget build(BuildContext context) {  
+  Widget build(BuildContext context) {
+    Slidable.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Slidable(
-          actionPane: SlidableDrawerActionPane(),
-          actionExtentRatio: 0.20,
-          closeOnScroll: false,
-           
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              SizedBox(width: 5.0),
-              Image.asset(widget.item.item.imageURL, width: 80.0, height: 90.0),
-              Container(
-                width: widget.editMode
-                    ? MediaQuery.of(context).size.width * 0.2
-                    : MediaQuery.of(context).size.width * 0.4,
-                margin: EdgeInsets.only(left: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "$_name",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text("Size: $_size",
-                        style: TextStyle(
-                            color: Colors.grey, fontWeight: FontWeight.w600)),
-                    widget.item.isSale
-                        ? Text(
-                            "ON SALE",
-                            style: TextStyle(color: Colors.red, fontSize: 12.0),
-                          )
-                        : Container()
-                  ],
-                ),
-              ),
-              Visibility(
-                visible: (widget.editMode && tempQuantity > 1),
-                child: GestureDetector(
-                  onTap: _pressedDeduct,
-                  child: Icon(Icons.remove_circle),
-                ),
-              ),
-              widget.editMode
-                  ? Text("Qty: $tempQuantity")
-                  : Text("Qty: ${widget.item.quantity} "),
-              Visibility(
-                visible: widget.editMode,
-                child: GestureDetector(
-                  onTap: _pressedAdd,
-                  child: Icon(Icons.add_circle),
-                ),
-              ),
-              widget.editMode
-                  ? Text(" ${formatCurrency.format(tempPrice)}  ")
-                  : Text(" ${formatCurrency.format(widget.item.price)}  "),
-            ],
-          ),
-          secondaryActions: widget.editMode
-              ? <Widget>[
-                  IconSlideAction(
-                    caption: 'Cancel',
-                    color: Colors.red,
-                    icon: Icons.cancel,
-                    onTap: _cancelEdit,
-                  ),
-                  IconSlideAction(
-                    caption: 'Confirm',
-                    color: Colors.green,
-                    icon: Icons.check_circle,
-                    onTap: _okEdit,
-                  ),
-                ]
-              : <Widget>[
-                  Visibility(
-                    visible: !widget.item.isSale,
-                    child: IconSlideAction(
-                      caption: 'Edit',
-                      color: Colors.yellow[600],
-                      icon: Icons.edit,
-                      onTap: this._switchEditMode,
-                    ),
-                  ),
-                  IconSlideAction(
-                    caption: 'Remove',
-                    color: Colors.red,
-                    icon: Icons.delete,
-                    onTap: this.widget.remove,
-                  ),
-                ],
-        ),
+        _getSlidable(),
         Divider(thickness: 2.0, height: 1.0),
-        
       ],
     );
   }

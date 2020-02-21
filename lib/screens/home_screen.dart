@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isLoggedIn = true;
     });
+  
   }
 
   bool compareItems(Item item1, Item item2) {
@@ -64,11 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _buildCategorySearchMap() {
     this.categorySearchMap = new HashMap<String, List<Item>>();
-    for (Item item in inventory){
-      for (String category in item.categories){
+    for (Item item in inventory) {
+      for (String category in item.categories) {
         category = category.toLowerCase();
-        print(category);
-        if (this.categorySearchMap.containsKey(category)){
+       
+        if (this.categorySearchMap.containsKey(category)) {
           this.categorySearchMap[category].add(item);
         } else {
           this.categorySearchMap[category] = [item];
@@ -225,7 +226,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView(
                   shrinkWrap: false,
                   children: <Widget>[
-
                     Sales(sales, this._addItemToCart, this.saleMap),
                     BuyAgain(this.buyAgain, _addToCartDialog),
                     SuggestionList(this.suggestions, _addToCartDialog),

@@ -73,7 +73,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     return Container(
       color: Colors.transparent,
       width: width * 0.95,
-      height: searching ? 300.0 : 80.0,
+      height: searching ? 350.0 : 80.0,
       margin: EdgeInsets.only(left: width * 0.025),
       child: SearchBar<Item>(
           // -------------- STYLING ------------- //
@@ -96,7 +96,6 @@ class _SearchWidgetState extends State<SearchWidget> {
             ),
           ),
           crossAxisCount: 1,
-
           // -------------------------------------- //
           onSearch: _search,
           onCancelled: () => searching = false,
